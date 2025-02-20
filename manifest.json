@@ -1,6 +1,6 @@
 {
   "name": "Radio App",
-  "short_name": "radio",
+  "short_name": "Radio App",
   "description": "Friends, listen to your radio",
   "start_url": "/index.html",
   "display": "standalone",
