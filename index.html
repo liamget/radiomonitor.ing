@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Radio Stream Player</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+
+	<style>
+		#playerContainer {
+			width: 250px;
+			height: 250px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			border-radius: 10px;
+			position: relative;
+			margin: 0 auto;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			overflow: hidden;
+			background: #000;
+		}
+
+		#stationLogo {
+			width: 100%;
+			height: 100%;
+			object-fit: contain; /* Ensures the full image is visible */
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		#stationName {
+			position: absolute;
+			top: 10px;
+			background: rgba(0, 0, 0, 0.7);
+			color: white;
+			padding: 5px 10px;
+			border-radius: 5px;
+			font-size: 1.1rem;
+			z-index: 1;
+		}
+
+		#clock {
+			font-size: 1.5rem;
+			font-weight: bold;
+			text-align: center;
+			margin-bottom: 10px;
+		}
+
+		#playPauseButton {
+			background: rgba(255, 255, 255, 0.7);
+			border: none;
+			padding: 10px 20px;
+			font-size: 1.2rem;
+			cursor: pointer;
+			border-radius: 5px;
+			z-index: 1;
+		}
+
+		#playPauseButton:hover {
+			background: rgba(255, 255, 255, 0.9);
+		}
+	</style>
+</head>
+<body class="bg-light">
+
+<div class="container mt-4 text-center">
+	<div class="row justify-content-center">
+		<div class="col-4">
+		  <h2><img src="radio.jpg" class="img-thumbnail" alt="Radio Stream Player"></h2>
+		</div>
+	  </div>
+
+	<div class="row">
+		<!-- Live Clock -->
+		<div id="clock"></div>
+	</div>
+
+	<div class="row">
+		<!-- Player Container -->
+		<div id="playerContainer" class="mt-3">
+			<img id="stationLogo" src="" alt="Station Logo">
+			<div id="stationName">Select a station</div>
+			<button id="playPauseButton" class="btn btn-light">▶ Play</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<!-- Station Selection -->
+		<div class="mt-3">
+			<label for="stationSelect" class="form-label">Select a Station:</label>
+			<select id="stationSelect" class="form-select">
+				<option value="">Loading stations...</option>
+			</select>
+		</div>
+	</div>
+
+</div>
+
+<script>
+	let player = null;
+	let isPlaying = false;
+
+	$(document).ready(function() {
+		// Load stations from JSON
+		$.getJSON("stations.json", function(data) {
+			let dropdown = $("#stationSelect");
+			dropdown.empty();
+			dropdown.append('<option value="">Select a station</option>');
+
+			$.each(data, function(index, station) {
+				dropdown.append(`<option value="${station.url}" data-logo="${station.logo}" data-name="${station.name}">${station.name}</option>`);
+			});
+		});
+
+		// Update UI when station is selected
+		$("#stationSelect").change(function() {
+			let selectedOption = $(this).find(":selected");
+			let logo = selectedOption.data("logo");
+			let name = selectedOption.data("name");
+			let streamUrl = selectedOption.val();
+		
+			// Stop playback if switching stations
+			if (player && isPlaying) {
+				player.stop();
+				isPlaying = false;
+				$("#playPauseButton").text("▶ Play");
+			}
+		
+			$("#stationLogo").attr("src", logo || ""); // Set image
+			$("#stationName").text(name || "Unknown Station");
+		
+			// Enable/Disable play button based on selection
+			if (streamUrl) {
+				$("#playPauseButton").prop("disabled", false);
+			} else {
+				$("#playPauseButton").prop("disabled", true);
+			}
+		});
+
+
+
+		// Function to play stream
+		function playStream(url) {
+			if (player) {
+				player.stop();
+			}
+
+			player = new Howl({
+				src: [url],
+				format: ["aac", "mp3"],
+				html5: true, // Ensure it works on mobile
+				onplay: function() {
+					$("#playPauseButton").text("⏸ Pause");
+					isPlaying = true;
+				},
+				onpause: function() {
+					$("#playPauseButton").text("▶ Play");
+					isPlaying = false;
+				},
+				onend: function() {
+					$("#playPauseButton").text("▶ Play");
+					isPlaying = false;
+				}
+			});
+
+			player.play();
+		}
+
+		// Play selected station
+		$("#playPauseButton").click(function() {
+			let streamUrl = $("#stationSelect").val();
+		
+			if (!streamUrl) {
+				alert("Please select a station first.");
+				return;
+			}
+		
+			if (!player || !isPlaying) {
+				playStream(streamUrl);
+			} else {
+				player.pause();
+			}
+		});
+
+
+		// Play custom stream
+		$("#playManualButton").click(function() {
+			let manualUrl = $("#manualUrl").val();
+			if (manualUrl) {
+				$("#stationName").text("Custom Stream");
+				$("#stationLogo").attr("src", "");
+				playStream(manualUrl);
+			} else {
+				alert("Please enter a valid .m3u or .aac URL.");
+			}
+		});
+
+		// Live Clock
+		function updateClock() {
+			let now = new Date();
+			let timeString = now.toLocaleTimeString();
+			$("#clock").text(timeString);
+		}
+		setInterval(updateClock, 1000);
+		updateClock();
+	});
+</script>
+
+</body>
+</html>
