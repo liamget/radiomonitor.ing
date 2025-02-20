@@ -3,12 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Radio Stream Player</title>
+	<title>Radio Player</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
 
 	<style>
+		html, body {
+			background-color: #FDDEF2;
+		}
+		
 		#playerContainer {
 			width: 250px;
 			height: 250px;
@@ -66,12 +69,12 @@
 		}
 	</style>
 </head>
-<body class="bg-light">
+<body class="">
 
 <div class="container mt-4 text-center">
 	<div class="row justify-content-center">
 		<div class="col-4">
-		  <h2><img src="radio.jpg" class="img-thumbnail" alt="Radio Stream Player"></h2>
+		  <h2><img src="radio.jpg" class="img-fluid" alt="Radio Stream Player"></h2>
 		</div>
 	  </div>
 
@@ -86,6 +89,7 @@
 			<img id="stationLogo" src="" alt="Station Logo">
 			<div id="stationName">Select a station</div>
 			<button id="playPauseButton" class="btn btn-light">▶ Play</button>
+			<audio id="audioPlayer" controls style="display: none;"></audio>
 		</div>
 	</div>
 
@@ -102,7 +106,7 @@
 </div>
 
 <script>
-	let player = null;
+	let audioPlayer = document.getElementById("audioPlayer");
 	let isPlaying = false;
 
 	$(document).ready(function() {
@@ -125,18 +129,20 @@
 			let streamUrl = selectedOption.val();
 		
 			// Stop playback if switching stations
-			if (player && isPlaying) {
-				player.stop();
+			if (!audioPlayer.paused) {
+				audioPlayer.pause();
 				isPlaying = false;
 				$("#playPauseButton").text("▶ Play");
 			}
 		
 			$("#stationLogo").attr("src", logo || ""); // Set image
 			$("#stationName").text(name || "Unknown Station");
+			$(document).prop('title', name + ' - Radio Player');
 		
 			// Enable/Disable play button based on selection
 			if (streamUrl) {
 				$("#playPauseButton").prop("disabled", false);
+				audioPlayer.src = streamUrl;
 			} else {
 				$("#playPauseButton").prop("disabled", true);
 			}
@@ -173,17 +179,19 @@
 
 		// Play selected station
 		$("#playPauseButton").click(function() {
-			let streamUrl = $("#stationSelect").val();
-		
-			if (!streamUrl) {
+			if (audioPlayer.src === "") {
 				alert("Please select a station first.");
 				return;
 			}
 		
-			if (!player || !isPlaying) {
-				playStream(streamUrl);
+			if (audioPlayer.paused) {
+				audioPlayer.play();
+				isPlaying = true;
+				$("#playPauseButton").text("⏸ Pause");
 			} else {
-				player.pause();
+				audioPlayer.pause();
+				isPlaying = false;
+				$("#playPauseButton").text("▶ Play");
 			}
 		});
 
