@@ -102,7 +102,7 @@
 			<img id="stationLogo" src="" alt="Station Logo">
 			<div id="stationName">Select a station</div>
 			<button id="playPauseButton" class="btn btn-light">▶ Play</button>
-			<audio id="audioPlayer" controls style="display: none;"></audio>
+			<audio id="audioPlayer" controls style="display: none;"  data-apikey="df04ff67dd3339a6fc19c9b8be164d5b5245ae93"></audio>
 		</div>
 	</div>
 
@@ -123,10 +123,37 @@
 </div>
 
 <script>
+
+$(document).ready(function() {
+	// Function to generate a random UUID
+	function generateUUID() {
+		// Create a random UUID (Version 4)
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = Math.random() * 16 | 0,
+				v = c === 'x' ? r : (r & 0x3 | 0x8);
+			return v.toString(16);
+		});
+	}
+
+	// Generate a random UUID
+	var randomUUID = generateUUID();
+
+	// Get the current date and set the expiry to 3 days from now
+	var currentDate = new Date();
+	currentDate.setDate(currentDate.getDate() + 3); // Add 3 days
+
+	// Format the expiry date to GMT
+	var expires = "expires=" + currentDate.toUTCString();
+
+	// Set the cookie with the generated UUID and 3-day expiry
+	document.cookie = "uuid=" + randomUUID + "; " + expires + "; path=/; domain=.live.streamtheworld.com";
+});
+
 	let audioPlayer = document.getElementById("audioPlayer");
 	let isPlaying = false;
-
+	
 	$(document).ready(function() {
+		
 		// Load stations from JSON
 		$.getJSON("stations.json", function(data) {
 			let dropdown = $("#stationSelect");
@@ -138,24 +165,64 @@
 			});
 		});
 
-		// Update UI when station is selected
 		$("#stationSelect").change(function() {
+			let selectedOption = $(this).find(":selected");
+			let streamUrl = selectedOption.val();
+		
+			if (!streamUrl) {
+				$("#playPauseButton").prop("disabled", true);
+				return;
+			}
+		
+			// Ensure the UUID cookie is set (if not already)
+			function generateUUID() {
+				return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+					var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+					return v.toString(16);
+				});
+			}
+			
+			let cookieExists = document.cookie.split('; ').find(row => row.startsWith('uuid='));
+			if (!cookieExists) {
+				let randomUUID = generateUUID();
+				let currentDate = new Date();
+				currentDate.setDate(currentDate.getDate() + 3);
+				document.cookie = `uuid=${randomUUID}; expires=${currentDate.toUTCString()}; path=/; domain=.live.streamtheworld.com`;
+			}
+		
+			// Send request to stream URL with cookies enabled
+			$.ajax({
+				url: streamUrl,
+				method: "GET",
+				xhrFields: {
+					withCredentials: true // Ensures cookies are sent with the request
+				},
+				success: function(response) {
+					console.log("Stream request successful", response);
+					audioPlayer.src = streamUrl;
+					$("#playPauseButton").prop("disabled", false);
+				},
+				error: function(xhr, status, error) {
+					console.error("Error loading stream:", status, error);
+				}
+			});
+			
 			let selectedOption = $(this).find(":selected");
 			let logo = selectedOption.data("logo");
 			let name = selectedOption.data("name");
 			let streamUrl = selectedOption.val();
-		
+			
 			// Stop playback if switching stations
 			if (!audioPlayer.paused) {
 				audioPlayer.pause();
 				isPlaying = false;
 				$("#playPauseButton").text("▶ Play");
 			}
-		
+			
 			$("#stationLogo").attr("src", logo || ""); // Set image
 			$("#stationName").text(name || "Unknown Station");
 			$(document).prop('title', name + ' - Radio Player');
-		
+			
 			// Enable/Disable play button based on selection
 			if (streamUrl) {
 				$("#playPauseButton").prop("disabled", false);
@@ -164,6 +231,7 @@
 				$("#playPauseButton").prop("disabled", true);
 			}
 		});
+
 
 
 
@@ -209,19 +277,6 @@
 				audioPlayer.pause();
 				isPlaying = false;
 				$("#playPauseButton").text("▶ Play");
-			}
-		});
-
-
-		// Play custom stream
-		$("#playManualButton").click(function() {
-			let manualUrl = $("#manualUrl").val();
-			if (manualUrl) {
-				$("#stationName").text("Custom Stream");
-				$("#stationLogo").attr("src", "");
-				playStream(manualUrl);
-			} else {
-				alert("Please enter a valid .m3u or .aac URL.");
 			}
 		});
 
