@@ -13,11 +13,12 @@
 	<meta name="apple-mobile-web-app-title" content="Radio App">
 	<link rel="apple-touch-icon" href="radio-192.png">
 	<link rel="icon" type="image/png" href="radio-512.png" />
+	<script src="https://kit.fontawesome.com/4dd5a9ae26.js" crossorigin="anonymous"></script>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;1,300&display=swap');
 		
 		html, body {
-			background-color: #FDDEF2;
+			background-color: #ffb8c1;
 			font-family: "Public Sans", serif;
 			font-optical-sizing: auto;
 			font-weight: 300;
@@ -36,7 +37,7 @@
 			margin: 0 auto;
 			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 			overflow: hidden;
-			background: #000;
+			background: #fff;
 		}
 
 		#stationLogo {
@@ -98,9 +99,9 @@
 	<div class="row mt-3">
 		<!-- Player Container -->
 		<div id="playerContainer" class="">
-			<img id="stationLogo" src="" alt="Station Logo">
+			<img id="stationLogo" src="">
 			<div id="stationName">Select a station</div>
-			<button id="playPauseButton" class="btn btn-light">▶ Play</button>
+			<button id="playPauseButton" class="btn btn-light"><i class='fa-solid fa-circle-play'></i> Play</button>
 			<audio id="audioPlayer" controls style="display: none;"></audio>
 		</div>
 	</div>
@@ -122,40 +123,39 @@
 </div>
 
 <script>
+	
 	let audioPlayer = document.getElementById("audioPlayer");
 	let isPlaying = false;
-
+	let loadingTimeout;
+	
 	$(document).ready(function() {
-		// Load stations from JSON
 		$.getJSON("stations.json", function(data) {
 			let dropdown = $("#stationSelect");
 			dropdown.empty();
 			dropdown.append('<option value="">Select a station</option>');
-
+	
 			$.each(data, function(index, station) {
 				dropdown.append(`<option value="${station.url}" data-logo="${station.logo}" data-name="${station.name}">${station.name}</option>`);
 			});
 		});
-
-		// Update UI when station is selected
+	
 		$("#stationSelect").change(function() {
 			let selectedOption = $(this).find(":selected");
 			let logo = selectedOption.data("logo");
 			let name = selectedOption.data("name");
 			let streamUrl = selectedOption.val();
-		
-			// Stop playback if switching stations
+	
 			if (!audioPlayer.paused) {
 				audioPlayer.pause();
 				isPlaying = false;
-				$("#playPauseButton").text("▶ Play");
+				resetPlayButton();
 			}
-		
-			$("#stationLogo").attr("src", logo || ""); // Set image
+	
+			$("#stationLogo").attr("src", logo || "");
+			// $("#stationLogo").attr("alt", name || "");
 			$("#stationName").text(name || "Unknown Station");
 			$(document).prop('title', name + ' - Radio Player');
-		
-			// Enable/Disable play button based on selection
+	
 			if (streamUrl) {
 				$("#playPauseButton").prop("disabled", false);
 				audioPlayer.src = streamUrl;
@@ -163,76 +163,67 @@
 				$("#playPauseButton").prop("disabled", true);
 			}
 		});
-
-
-
-		// Function to play stream
-		function playStream(url) {
-			if (player) {
-				player.stop();
-			}
-
-			player = new Howl({
-				src: [url],
-				format: ["aac", "mp3"],
-				html5: true, // Ensure it works on mobile
-				onplay: function() {
-					$("#playPauseButton").text("⏸ Pause");
-					isPlaying = true;
-				},
-				onpause: function() {
-					$("#playPauseButton").text("▶ Play");
-					isPlaying = false;
-				},
-				onend: function() {
-					$("#playPauseButton").text("▶ Play");
-					isPlaying = false;
-				}
-			});
-
-			player.play();
+	
+		function resetPlayButton() {
+			$("#playPauseButton").html("<i class='fa-solid fa-circle-play'></i> Play");
+			$("#stationLogo").attr("src", "");
+			// $("#stationLogo").attr("alt", "");
 		}
-
-		// Play selected station
+	
+		function showLoading() {
+			$("#playPauseButton").html('<i class="fa-solid fa-circle-notch fa-spin"></i>');
+		}
+	
+		function hideLoading() {
+			clearTimeout(loadingTimeout);
+		}
+	
 		$("#playPauseButton").click(function() {
 			if (audioPlayer.src === "") {
 				alert("Please select a station first.");
 				return;
 			}
-		
+	
 			if (audioPlayer.paused) {
+				showLoading();
 				audioPlayer.play();
-				isPlaying = true;
-				$("#playPauseButton").text("⏸ Pause");
+				
+				loadingTimeout = setTimeout(function() {
+					audioPlayer.pause();
+					hideLoading();
+					resetPlayButton();
+					alert("Failed to load stream. Please try again.");
+				}, 10000);
 			} else {
 				audioPlayer.pause();
-				isPlaying = false;
-				$("#playPauseButton").text("▶ Play");
+				hideLoading();
+				resetPlayButton();
 			}
 		});
-
-
-		// Play custom stream
-		$("#playManualButton").click(function() {
-			let manualUrl = $("#manualUrl").val();
-			if (manualUrl) {
-				$("#stationName").text("Custom Stream");
-				$("#stationLogo").attr("src", "");
-				playStream(manualUrl);
-			} else {
-				alert("Please enter a valid .m3u or .aac URL.");
-			}
+	
+		audioPlayer.addEventListener("playing", function() {
+			hideLoading();
+			$("#playPauseButton").html("<i class='fa-solid fa-circle-pause'></i> Pause");
+			isPlaying = true;
 		});
-
-		// Live Clock
+	
+		audioPlayer.addEventListener("pause", function() {
+			hideLoading();
+			resetPlayButton();
+			isPlaying = false;
+		});
+	
 		function updateClock() {
 			let now = new Date();
 			let timeString = now.toLocaleTimeString();
 			$("#clock").text(timeString);
 		}
+	
 		setInterval(updateClock, 1000);
 		updateClock();
 	});
+
+	
 </script>
 
 </body>

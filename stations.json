@@ -19,5 +19,71 @@
 		"name": "ABC News",
 		"logo": "abc-news.png",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/index.m3u8"
+	},
+	{
+		"name": "ABC Broken Hill",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038262/localbrokenhill/index.m3u8"
+	},
+	{
+		"name": "ABC Central Coast",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038258/localcentralcoast/index.m3u8"
+	},
+	{
+		"name": "ABC Central West NSW",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038243/localcentralwest/index.m3u8"
+	},
+	{
+		"name": "ABC Coffs Coast",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038246/localcoffscoast/index.m3u8"
+	},
+	{
+		"name": "ABC Illawarra",
+		"logo": "abc-illawarra.png",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038245/localillawarra/index.m3u8"
+	},
+	{
+		"name": "ABC Mid North Coast",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038264/localmidnorthcoast/index.m3u8"
+	},
+	{
+		"name": "ABC Newcastle",
+		"logo": "abc-newcastle.png",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038306/localnewcastle/index.m3u8"
+	},
+	{
+		"name": "ABC New England North West",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038242/localnewengland/index.m3u8"
+	},
+	{
+		"name": "ABC North Coast",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038170/localnorthcoast/index.m3u8"
+	},
+	{
+		"name": "ABC Riverina",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038241/localriverina/index.m3u8"
+	},
+	{
+		"name": "ABC Upper Hunter",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038241/localriverina/index.m3u8"
+	},
+	{
+		"name": "ABC South East NSW",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038247/localsoutheastnsw/index.m3u8"
+	},
+	{
+		"name": "ABC Western Plains",
+		"logo": "",
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038336/localdubbo/index.m3u8"
 	}
+	
 ]
