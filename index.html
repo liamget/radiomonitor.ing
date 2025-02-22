@@ -267,6 +267,7 @@
 	*/
 	
 	if ('mediaSession' in navigator) {
+		let selectedOption = $(this).find(":selected");
 		let logo = selectedOption.data("logo");
 		let name = selectedOption.data("name");
 		let streamUrl = selectedOption.val();
