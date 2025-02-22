@@ -2,7 +2,7 @@
   "name": "Radio App",
   "short_name": "Radio App",
   "description": "Friends, listen to your radio",
-  "start_url": "/index.html",
+  "start_url": "https://liamget.github.io/radio/",
   "display": "standalone",
   "background_color": "#FDDEF2",
   "theme_color": "#000000",
