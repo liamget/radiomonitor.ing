@@ -272,41 +272,43 @@ $(document).ready(function() {
     updateClock();
 });
 
-// PWA fix
-if ('mediaSession' in navigator) {
-    navigator.mediaSession.setActionHandler('play', () => {
-        audioPlayer.play();
-    });
-
-    navigator.mediaSession.setActionHandler('pause', () => {
-        audioPlayer.pause();
-    });
-
-    navigator.mediaSession.setActionHandler('stop', () => {
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
-    });
-}
-
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden && !audioPlayer.paused) {
-        audioPlayer.pause();
-    }
-});
-
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
-        })
-    );
-});
-
-document.getElementById('playButton').addEventListener('click', () => {
-    audioPlayer.play().catch((e) => {
-        console.error('Playback failed:', e);
-    });
-});
+/* 
+roll back PWA fix
+	if ('mediaSession' in navigator) {
+	    navigator.mediaSession.setActionHandler('play', () => {
+	        audioPlayer.play();
+	    });
+	
+	    navigator.mediaSession.setActionHandler('pause', () => {
+	        audioPlayer.pause();
+	    });
+	
+	    navigator.mediaSession.setActionHandler('stop', () => {
+	        audioPlayer.pause();
+	        audioPlayer.currentTime = 0;
+	    });
+	}
+	
+	document.addEventListener('visibilitychange', () => {
+	    if (document.hidden && !audioPlayer.paused) {
+	        audioPlayer.pause();
+	    }
+	});
+	
+	self.addEventListener('fetch', (event) => {
+	    event.respondWith(
+	        caches.match(event.request).then((response) => {
+	            return response || fetch(event.request);
+	        })
+	    );
+	});
+	
+	document.getElementById('playButton').addEventListener('click', () => {
+	    audioPlayer.play().catch((e) => {
+	        console.error('Playback failed:', e);
+	    });
+	});
+*/
 </script>
 
 
