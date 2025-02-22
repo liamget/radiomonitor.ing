@@ -141,194 +141,172 @@
 </div>
 
 <script>
-	let audioPlayer = document.getElementById("audioPlayer");
-	let isPlaying = false;
-	let loadingTimeout;
-	
-	$(document).ready(function() {
-		
-		$.getJSON("stations.json", function(data) {
-			let dropdown = $("#stationSelect");
-			dropdown.empty();
-			dropdown.append('<option value="">Select a station</option>');
-	
-			$.each(data, function(index, station) {
-				dropdown.append(`<option value="${station.url}" data-logo="${station.logo}" data-name="${station.name}">${station.name}</option>`);
-			});
-		});
-		
-		// Quick Select button functionality
-		$("button.quickSelect").click(function() {
-			let stationName = $(this).data("name");
-		
-			$("#stationSelect option").each(function() {
-				if ($(this).data("name") === stationName) {
-					$(this).prop("selected", true).trigger("change");
-				}
-			});
-		});
+let audioPlayer = document.getElementById("audioPlayer");
+let isPlaying = false;
+let loadingTimeout;
 
-		// Trigger play automatically when a station is selected via dropdown or quick select
-		$("#stationSelect").change(function() {
-			let selectedOption = $(this).find(":selected");
-			let logo = selectedOption.data("logo");
-			let name = selectedOption.data("name");
-			let streamUrl = selectedOption.val();
-	
-			if (!audioPlayer.paused) {
-				audioPlayer.pause();
-				isPlaying = false;
-				resetPlayButton();
-			}
-	
-			$("#stationLogo").attr("src", logo || "radio-full-light.png");
-			$("#stationName").text(name || "Unknown Station");
-			$(document).prop('title', name + ' - Radio Player');
-	
-			if (streamUrl) {
-				$("#playPauseButton").prop("disabled", false);
-				audioPlayer.src = streamUrl;
-				
-				// Automatically play the station after selection
-				showLoading();
-				audioPlayer.play();
-	
-				loadingTimeout = setTimeout(function() {
-					audioPlayer.pause();
-					hideLoading();
-					resetPlayButton();
-					alert("Failed to load stream. Please try again.");
-				}, 10000);
-			} else {
-				$("#playPauseButton").prop("disabled", true);
-			}
-		});
-	
-		function resetPlayButton() {
-			$("#playPauseButton").html("<i class='fa-solid fa-circle-play'></i> Play");
-			$("#stationLogo").attr("src", "");
-		}
-	
-		function showLoading() {
-			$("#playPauseButton").html('<i class="fa-solid fa-circle-notch fa-spin"></i>');
-		}
-	
-		function hideLoading() {
-			clearTimeout(loadingTimeout);
-		}
-		
-		$("#playPauseButton").click(function() {
-			if (audioPlayer.src === "") {
-				alert("Please select a station first.");
-				return;
-			}
-	
-			if (audioPlayer.paused) {
-				showLoading();
-				audioPlayer.play();
-				
-				loadingTimeout = setTimeout(function() {
-					audioPlayer.pause();
-					hideLoading();
-					resetPlayButton();
-					alert("Failed to load stream. Please try again.");
-				}, 10000);
-			} else {
-				audioPlayer.pause();
-				hideLoading();
-				resetPlayButton();
-			}
-		});
-	
-		audioPlayer.addEventListener("playing", function() {
-			hideLoading();
-			$("#playPauseButton").html("<i class='fa-solid fa-circle-pause'></i> Pause");
-			isPlaying = true;
-		});
-	
-		audioPlayer.addEventListener("pause", function() {
-			hideLoading();
-			resetPlayButton();
-			isPlaying = false;
-		});
-	
-		function updateClock() {
-			let now = new Date();
-			let timeString = now.toLocaleTimeString();
-			$("#clock").text(timeString);
-		}
-	
-		setInterval(updateClock, 1000);
-		updateClock();
-	});
-	
-	// PWA fix
-	
-	/*
-	
-	let logo = selectedOption.data("logo");
-	let name = selectedOption.data("name");
-	let streamUrl = selectedOption.val();
-	
-	*/
-	
-	if ('mediaSession' in navigator) {
-		let selectedOption = $(this).find(":selected");
-		let logo = selectedOption.data("logo");
-		let name = selectedOption.data("name");
-		let streamUrl = selectedOption.val();
-		
-		navigator.mediaSession.metadata = new MediaMetadata({
-			title: 'Radio Player',
-			artist: name,
-			artwork: [
-				{ src: logo, sizes: '512x512', type: 'image/png' }
-			]
-		});
-	
-		navigator.mediaSession.setActionHandler('play', () => {
-			audioElement.play();
-		});
-	
-		navigator.mediaSession.setActionHandler('pause', () => {
-			audioElement.pause();
-		});
-	
-		navigator.mediaSession.setActionHandler('stop', () => {
-			audioElement.pause();
-			audioElement.currentTime = 0;
-		});
-	}
-	
-	const audioElement = new Audio(streamURL);
-	audioElement.preload = 'auto';
-	audioElement.autoplay = true;
-	
-	document.addEventListener('visibilitychange', () => {
-		if (document.hidden && !audioElement.paused) {
-			audioElement.pause();
-		}
-	});
-	
-	audioElement.addEventListener('ended', () => {
-		audioElement.src = streamURL;
-		audioElement.play();
-	});
-	
-	self.addEventListener('fetch', (event) => {
-		event.respondWith(
-			caches.match(event.request).then((response) => {
-				return response || fetch(event.request);
-			})
-		);
-	});
-	
-	document.getElementById('playButton').addEventListener('click', () => {
-		audioElement.play().catch((e) => {
-			console.error('Playback failed:', e);
-		});
-	});
-	
+$(document).ready(function() {
+    $.getJSON("stations.json", function(data) {
+        let dropdown = $("#stationSelect");
+        dropdown.empty();
+        dropdown.append('<option value="">Select a station</option>');
+
+        $.each(data, function(index, station) {
+            dropdown.append(`<option value="${station.url}" data-logo="${station.logo}" data-name="${station.name}">${station.name}</option>`);
+        });
+    });
+
+    // Quick Select button functionality
+    $("button.quickSelect").click(function() {
+        let stationName = $(this).data("name");
+
+        $("#stationSelect option").each(function() {
+            if ($(this).data("name") === stationName) {
+                $(this).prop("selected", true).trigger("change");
+            }
+        });
+    });
+
+    // Trigger play automatically when a station is selected via dropdown or quick select
+    $("#stationSelect").change(function() {
+        let selectedOption = $(this).find(":selected");
+        let logo = selectedOption.data("logo");
+        let name = selectedOption.data("name");
+        let streamUrl = selectedOption.val();
+
+        if (!audioPlayer.paused) {
+            audioPlayer.pause();
+            isPlaying = false;
+            resetPlayButton();
+        }
+
+        $("#stationLogo").attr("src", logo || "radio-full-light.png");
+        $("#stationName").text(name || "Unknown Station");
+        $(document).prop('title', name + ' - Radio Player');
+
+        if (streamUrl) {
+            $("#playPauseButton").prop("disabled", false);
+            audioPlayer.src = streamUrl;
+
+            // Automatically play the station after selection
+            showLoading();
+            audioPlayer.play();
+
+            loadingTimeout = setTimeout(function() {
+                audioPlayer.pause();
+                hideLoading();
+                resetPlayButton();
+                alert("Failed to load stream. Please try again.");
+            }, 10000);
+        } else {
+            $("#playPauseButton").prop("disabled", true);
+        }
+
+        // Update Media Session metadata
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: 'Radio Player',
+                artist: name,
+                artwork: [
+                    { src: logo, sizes: '512x512', type: 'image/png' }
+                ]
+            });
+        }
+    });
+
+    function resetPlayButton() {
+        $("#playPauseButton").html("<i class='fa-solid fa-circle-play'></i> Play");
+        $("#stationLogo").attr("src", "");
+    }
+
+    function showLoading() {
+        $("#playPauseButton").html('<i class="fa-solid fa-circle-notch fa-spin"></i>');
+    }
+
+    function hideLoading() {
+        clearTimeout(loadingTimeout);
+    }
+
+    $("#playPauseButton").click(function() {
+        if (audioPlayer.src === "") {
+            alert("Please select a station first.");
+            return;
+        }
+
+        if (audioPlayer.paused) {
+            showLoading();
+            audioPlayer.play();
+
+            loadingTimeout = setTimeout(function() {
+                audioPlayer.pause();
+                hideLoading();
+                resetPlayButton();
+                alert("Failed to load stream. Please try again.");
+            }, 10000);
+        } else {
+            audioPlayer.pause();
+            hideLoading();
+            resetPlayButton();
+        }
+    });
+
+    audioPlayer.addEventListener("playing", function() {
+        hideLoading();
+        $("#playPauseButton").html("<i class='fa-solid fa-circle-pause'></i> Pause");
+        isPlaying = true;
+    });
+
+    audioPlayer.addEventListener("pause", function() {
+        hideLoading();
+        resetPlayButton();
+        isPlaying = false;
+    });
+
+    function updateClock() {
+        let now = new Date();
+        let timeString = now.toLocaleTimeString();
+        $("#clock").text(timeString);
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+});
+
+// PWA fix
+if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play', () => {
+        audioPlayer.play();
+    });
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+        audioPlayer.pause();
+    });
+
+    navigator.mediaSession.setActionHandler('stop', () => {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+    });
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && !audioPlayer.paused) {
+        audioPlayer.pause();
+    }
+});
+
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
+    );
+});
+
+document.getElementById('playButton').addEventListener('click', () => {
+    audioPlayer.play().catch((e) => {
+        console.error('Playback failed:', e);
+    });
+});
 </script>
 
 
