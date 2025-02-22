@@ -52,7 +52,7 @@
 		#stationName {
 			position: absolute;
 			top: 10px;
-			background: rgba(0, 0, 0, 0.7);
+			background: #000;
 			color: white;
 			padding: 5px 10px;
 			border-radius: 5px;
@@ -99,7 +99,7 @@
 	<div class="row mt-3">
 		<!-- Player Container -->
 		<div id="playerContainer" class="">
-			<img id="stationLogo" src="">
+			<img id="stationLogo" src="radio-full-light.png">
 			<div id="stationName">Select a station</div>
 			<button id="playPauseButton" class="btn"><i class='fa-solid fa-circle-play'></i> Play</button>
 			<audio id="audioPlayer" controls style="display: none;"></audio>
@@ -109,13 +109,13 @@
 	<div class="row mt-3 justify-content-center">
 		<!-- Quick Access Buttons -->
 		<h4>Quick Select:</h4>
-		<div class="col col-xs-6 col-md-3">
-			<button id="play2GB" class="btn btn-primary me-2 quickSelect" data-name="2GB">
+		<div class="col col-xs-6 col-md-2">
+			<button id="play2GB" class="btn btn-dark me-2 quickSelect w-100" data-name="2GB">
 				2GB
 			</button>
 		</div>
-		<div class="col col-xs-6 col-md-3">
-			<button id="playABCSydney" class="btn btn-primary me-2 quickSelect" data-name="ABC Sydney">
+		<div class="col col-xs-6 col-md-2">
+			<button id="playABCSydney" class="btn btn-dark me-2 quickSelect w-100" data-name="ABC Sydney">
 				ABC Sydney
 			</button>
 		</div>
@@ -124,7 +124,7 @@
 	<div class="row mt-3 mb-5">
 		<!-- Station Selection -->
 		<div class="">
-			<h5><label for="stationSelect" class="form-label">Or select another station:</label></h5>
+			<h5><label for="stationSelect" class="form-label text-dark">Or select another station:</label></h5>
 			<select id="stationSelect" class="form-select">
 				<option value="">Loading stations...</option>
 			</select>
@@ -174,7 +174,7 @@
 				resetPlayButton();
 			}
 	
-			$("#stationLogo").attr("src", logo || "");
+			$("#stationLogo").attr("src", logo || "radio-full-light.png");
 			// $("#stationLogo").attr("alt", name || "");
 			$("#stationName").text(name || "Unknown Station");
 			$(document).prop('title', name + ' - Radio Player');
