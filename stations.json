@@ -2,7 +2,7 @@
 	{
 		"name": "2GB",
 		"logo": "2gb.png",  
-		"logo": "https://playerservices.streamtheworld.com/api/livestream-redirect/2GB.mp3"
+		"url": "http://playerservices.streamtheworld.com/api/livestream-redirect/2GB.mp3"
 		
 	},
 	{
