@@ -255,6 +255,73 @@
 		setInterval(updateClock, 1000);
 		updateClock();
 	});
+	
+	// PWA fix
+	
+	/*
+	
+	let logo = selectedOption.data("logo");
+	let name = selectedOption.data("name");
+	let streamUrl = selectedOption.val();
+	
+	*/
+	
+	if ('mediaSession' in navigator) {
+		let logo = selectedOption.data("logo");
+		let name = selectedOption.data("name");
+		let streamUrl = selectedOption.val();
+		
+		navigator.mediaSession.metadata = new MediaMetadata({
+			title: 'Radio Player',
+			artist: name,
+			artwork: [
+				{ src: logo, sizes: '512x512', type: 'image/png' }
+			]
+		});
+	
+		navigator.mediaSession.setActionHandler('play', () => {
+			audioElement.play();
+		});
+	
+		navigator.mediaSession.setActionHandler('pause', () => {
+			audioElement.pause();
+		});
+	
+		navigator.mediaSession.setActionHandler('stop', () => {
+			audioElement.pause();
+			audioElement.currentTime = 0;
+		});
+	}
+	
+	const audioElement = new Audio(streamURL);
+	audioElement.preload = 'auto';
+	audioElement.autoplay = true;
+	
+	document.addEventListener('visibilitychange', () => {
+		if (document.hidden && !audioElement.paused) {
+			audioElement.pause();
+		}
+	});
+	
+	audioElement.addEventListener('ended', () => {
+		audioElement.src = streamURL;
+		audioElement.play();
+	});
+	
+	self.addEventListener('fetch', (event) => {
+		event.respondWith(
+			caches.match(event.request).then((response) => {
+				return response || fetch(event.request);
+			})
+		);
+	});
+	
+	document.getElementById('playButton').addEventListener('click', () => {
+		audioElement.play().catch((e) => {
+			console.error('Playback failed:', e);
+		});
+	});
+	
 </script>
 
 
