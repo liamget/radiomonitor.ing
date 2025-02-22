@@ -1,0 +1,31 @@
+name: Update Version on Push
+
+on:
+  push:
+	branches:
+	  - main  # Or your deployment branch
+
+jobs:
+  update-version:
+	runs-on: ubuntu-latest
+
+	steps:
+	- name: Checkout Repository
+	  uses: actions/checkout@v2
+
+	- name: Get Current Date and Commit Hash
+	  id: get-info
+	  run: |
+		echo "$(date +'%Y%m%d%H%M%S') $(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+	- name: Update HTML File
+	  run: |
+		sed -i "s|<!-- VERSION_PLACEHOLDER -->|$VERSION|g" index.html
+
+	- name: Commit and Push Changes
+	  run: |
+		git config --global user.name "github-actions"
+		git config --global user.email "github-actions@github.com"
+		git add index.html
+		git commit -m "Update version: $VERSION" || echo "No changes to commit"
+		git push
