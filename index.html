@@ -101,25 +101,36 @@
 		<div id="playerContainer" class="">
 			<img id="stationLogo" src="">
 			<div id="stationName">Select a station</div>
-			<button id="playPauseButton" class="btn btn-light"><i class='fa-solid fa-circle-play'></i> Play</button>
+			<button id="playPauseButton" class="btn"><i class='fa-solid fa-circle-play'></i> Play</button>
 			<audio id="audioPlayer" controls style="display: none;"></audio>
 		</div>
 	</div>
 
-	<div class="row mt-3">
+	<div class="row mt-3 justify-content-center">
+		<!-- Quick Access Buttons -->
+		<h4>Quick Select:</h4>
+		<div class="col col-xs-6 col-md-3">
+			<button id="play2GB" class="btn btn-primary me-2 quickSelect" data-name="2GB">
+				2GB
+			</button>
+		</div>
+		<div class="col col-xs-6 col-md-3">
+			<button id="playABCSydney" class="btn btn-primary me-2 quickSelect" data-name="ABC Sydney">
+				ABC Sydney
+			</button>
+		</div>
+	</div>
+	
+	<div class="row mt-3 mb-5">
 		<!-- Station Selection -->
 		<div class="">
-			<h4><label for="stationSelect" class="form-label">Select a Station:</label></h4>
+			<h5><label for="stationSelect" class="form-label">Or select another station:</label></h5>
 			<select id="stationSelect" class="form-select">
 				<option value="">Loading stations...</option>
 			</select>
 		</div>
 	</div>
 	
-	<div class="row mt-3 mb-3">
-		<div class="col"><a href="https://github.com/liamget/radio" target="_blank"><i class="fa-brands fa-github"></i></a></div>
-	</div>
-
 </div>
 
 <script>
@@ -129,6 +140,7 @@
 	let loadingTimeout;
 	
 	$(document).ready(function() {
+				
 		$.getJSON("stations.json", function(data) {
 			let dropdown = $("#stationSelect");
 			dropdown.empty();
@@ -138,6 +150,17 @@
 				dropdown.append(`<option value="${station.url}" data-logo="${station.logo}" data-name="${station.name}">${station.name}</option>`);
 			});
 		});
+		
+		$("button.quickSelect").click(function() {
+			let stationName = $(this).data("name");
+		
+			$("#stationSelect option").each(function() {
+				if ($(this).data("name") === stationName) {
+					$(this).prop("selected", true).trigger("change");
+				}
+			});
+		});
+
 	
 		$("#stationSelect").change(function() {
 			let selectedOption = $(this).find(":selected");
@@ -177,7 +200,7 @@
 		function hideLoading() {
 			clearTimeout(loadingTimeout);
 		}
-	
+		
 		$("#playPauseButton").click(function() {
 			if (audioPlayer.src === "") {
 				alert("Please select a station first.");
