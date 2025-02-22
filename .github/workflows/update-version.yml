@@ -3,7 +3,7 @@ name: Update Version on Push
 on:
   push:
 	branches:
-	  - main  # Or your deployment branch
+	  - main
 
 jobs:
   update-version:
