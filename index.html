@@ -135,13 +135,12 @@
 </div>
 
 <script>
-	
 	let audioPlayer = document.getElementById("audioPlayer");
 	let isPlaying = false;
 	let loadingTimeout;
 	
 	$(document).ready(function() {
-				
+		
 		$.getJSON("stations.json", function(data) {
 			let dropdown = $("#stationSelect");
 			dropdown.empty();
@@ -152,6 +151,7 @@
 			});
 		});
 		
+		// Quick Select button functionality
 		$("button.quickSelect").click(function() {
 			let stationName = $(this).data("name");
 		
@@ -162,7 +162,7 @@
 			});
 		});
 
-	
+		// Trigger play automatically when a station is selected via dropdown or quick select
 		$("#stationSelect").change(function() {
 			let selectedOption = $(this).find(":selected");
 			let logo = selectedOption.data("logo");
@@ -176,13 +176,23 @@
 			}
 	
 			$("#stationLogo").attr("src", logo || "radio-full-light.png");
-			// $("#stationLogo").attr("alt", name || "");
 			$("#stationName").text(name || "Unknown Station");
 			$(document).prop('title', name + ' - Radio Player');
 	
 			if (streamUrl) {
 				$("#playPauseButton").prop("disabled", false);
 				audioPlayer.src = streamUrl;
+				
+				// Automatically play the station after selection
+				showLoading();
+				audioPlayer.play();
+	
+				loadingTimeout = setTimeout(function() {
+					audioPlayer.pause();
+					hideLoading();
+					resetPlayButton();
+					alert("Failed to load stream. Please try again.");
+				}, 10000);
 			} else {
 				$("#playPauseButton").prop("disabled", true);
 			}
@@ -191,7 +201,6 @@
 		function resetPlayButton() {
 			$("#playPauseButton").html("<i class='fa-solid fa-circle-play'></i> Play");
 			$("#stationLogo").attr("src", "");
-			// $("#stationLogo").attr("alt", "");
 		}
 	
 		function showLoading() {
@@ -246,9 +255,8 @@
 		setInterval(updateClock, 1000);
 		updateClock();
 	});
-
-	
 </script>
+
 
 </body>
 </html>
