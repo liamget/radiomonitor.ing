@@ -16,11 +16,6 @@
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038318/rnnsw/index.m3u8"
 	},
 	{
-		"name": "ABC News",
-		"logo": "img/abc-news.png",  
-		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/index.m3u8"
-	},
-	{
 		"name": "WSFM/Gold FM",
 		"logo": "",  
 		"url": "https://ais-arn.streamguys1.com/au_002/playlist.m3u8"
@@ -34,6 +29,11 @@
 		"name": "KIIS FM",
 		"logo": "",  
 		"url": "https://ais-arn.streamguys1.com/au_007/playlist.m3u8"
+	},
+	{
+		"name": "ABC News",
+		"logo": "img/abc-news.png",  
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/index.m3u8"
 	},
 	{
 		"name": "ABC Broken Hill",
