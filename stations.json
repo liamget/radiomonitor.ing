@@ -21,6 +21,21 @@
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/index.m3u8"
 	},
 	{
+		"name": "WSFM/Gold FM",
+		"logo": "",  
+		"url": "https://ais-arn.streamguys1.com/au_002/playlist.m3u8"
+	},
+	{
+		"name": "2Day FM",
+		"logo": "",  
+		"url": "https://wz2liw.scahw.com.au/live/2day_128.stream/playlist.m3u8"
+	},
+	{
+		"name": "KIIS FM",
+		"logo": "",  
+		"url": "https://ais-arn.streamguys1.com/au_007/playlist.m3u8"
+	},
+	{
 		"name": "ABC Broken Hill",
 		"logo": "",
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038262/localbrokenhill/index.m3u8"
