@@ -1,0 +1,55 @@
+[
+	{
+		"name": "ABC RN (Sydney feed)",
+		"logo": "img/abc-rn.png",  
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038318/rnnsw/index.m3u8"
+	},
+	{
+		"name": "ABC News",
+		"logo": "img/abc-news.png",  
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/index.m3u8"
+	},
+	{
+		"name": "ABC Sydney",
+		"logo": "img/abc-sydney.png",  
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038302/localsydney/index.m3u8"
+	},
+	{
+		"name": "2GB Sydney",
+		"logo": "img/2gb.png",  
+		"url": "http://playerservices.streamtheworld.com/api/livestream-redirect/2GB.mp3"
+		
+	},
+	{
+		"name": "ABC Melbourne",
+		"logo": "img/abc-melbourne.png",  
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038300/localmelbourne/index.m3u8"
+	},
+	{
+		"name": "3AW Melbourne",
+		"logo": "img/3aw.png",  
+		"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/3AW.mp3"
+	},
+	{
+		"name": "ABC Brisbane",
+		"logo": "img/abc-brisbane.png",  
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038304/localbrisbane/index.m3u8"
+	},
+	{
+		"name": "4BC Brisbane",
+		"logo": "img/abc-brisbane.png",  
+		"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/4BC.mp3"
+		
+	},
+	{
+		"name": "ABC Perth",
+		"logo": "img/abc-perth.png",  
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038301/localperth/index.m3u8"
+	},
+	{
+		"name": "6PR Perth",
+		"logo": "img/6pr.png",  
+		"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/6PR.mp3"
+	}
+	
+]
