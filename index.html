@@ -222,8 +222,8 @@ $(document).ready(function() {
         // Update Media Session metadata
         if ('mediaSession' in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
-                title: 'RadioMonitor.ing',
-                artist: name,
+                title: name,
+                artist: 'RadioMonitor.ing',
                 artwork: [
                     { src: logo, sizes: '512x512', type: 'image/png' }
                 ]
