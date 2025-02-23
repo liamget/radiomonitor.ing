@@ -24,6 +24,10 @@
 			font-style: normal;
 		}
 		
+		h2 {
+			font-weight: 800;
+		}
+		
 		#playerContainer {
 			width: 250px;
 			height: 250px;
@@ -74,18 +78,13 @@
 			background: rgba(255, 255, 255, 0.9);
 		}
 		
-		#build {
-			font-size: 0.75rem;
-			font-style: italic;
-		}
-		
 	</style>
 </head>
 <body class="">
 
 <div class="container mt-4 text-center">
 	<div class="row text-center">
-		<h2 class="font-bold">www.radiomonitor.ing</h2>
+		<h2>www.radiomonitor.ing</h2>
 	</div>
 
 	<div class="row mt-2">
@@ -98,7 +97,7 @@
 		<div id="playerContainer" class="">
 			<img id="stationLogo" src="img/generic-radio-square-fade.png">
 			<div id="stationName">Select a station</div>
-			<button id="playPauseButton" class="btn"><i class='fa-solid fa-circle-play'></i> Play</button>
+			<button id="playPauseButton" class="btn"><i class='fa-sharp-duotone fa-regular fa-circle-play'></i> Play</button>
 			<audio id="audioPlayer" controls style="display: none;"></audio>
 		</div>
 	</div>
@@ -118,9 +117,9 @@
 		</div>
 	</div>
 	
-	<div class="row mt-3 mb-5">
+	<div class="row mt-3 justify-content-center">
 		<!-- Station Selection -->
-		<div class="">
+		<div class="col col-xs-12 col-md-6">
 			<h5><label for="stationSelect" class="form-label text-dark">Or select another station:</label></h5>
 			<select id="stationSelect" class="form-select">
 				<option value="">Loading stations...</option>
@@ -130,7 +129,7 @@
 	
 	<div class="row mt-3 mb-5">
 		<!-- Build # -->
-		<div class="text-black-50" id="build">Build <!-- VERSION_PLACEHOLDER --></div>
+		<div class="" id="build"><a href="https://github.com/liamget/radio" class="text-black-50" target="_blank"><i class="fa-brands fa-github"></i></a></div>
 		</div>
 	</div>
 	
@@ -218,12 +217,12 @@ $(document).ready(function() {
     });
 
     function resetPlayButton() {
-        $("#playPauseButton").html("<i class='fa-solid fa-circle-play'></i> Play");
+        $("#playPauseButton").html("<i class='fa-sharp-duotone fa-regular fa-circle-play'></i> Play");
         $("#stationLogo").attr("src", "");
     }
 
     function showLoading() {
-        $("#playPauseButton").html('<i class="fa-solid fa-circle-notch fa-spin"></i>');
+        $("#playPauseButton").html('<i class="fa-sharp-duotone fa-regular fa-spinner-third fa-spin"></i> Loading');
     }
 
     function hideLoading() {
@@ -255,7 +254,7 @@ $(document).ready(function() {
 
     audioPlayer.addEventListener("playing", function() {
         hideLoading();
-        $("#playPauseButton").html("<i class='fa-solid fa-circle-pause'></i> Pause");
+        $("#playPauseButton").html("<i class='fa-sharp-duotone fa-regular fa-circle-pause'></i> Pause");
         isPlaying = true;
     });
 
