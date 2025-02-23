@@ -102,7 +102,7 @@
 		</div>
 	</div>
 
-	<div class="row mt-3 justify-content-center">
+	<div class="row mt-3 justify-content-center" id="quickAccess">
 		<!-- Quick Access Buttons -->
 		<h4>Quick Select:</h4>
 		<div class="col col-xs-6 col-md-2">
@@ -117,7 +117,7 @@
 		</div>
 	</div>
 	
-	<div class="row mt-3 justify-content-center">
+	<div class="row mt-3 justify-content-center" id="selectAStation">
 		<!-- Station Selection -->
 		<div class="col col-xs-12 col-md-6">
 			<h5><label for="stationSelect" class="form-label text-dark">Or select another station:</label></h5>
@@ -141,7 +141,23 @@ let isPlaying = false;
 let loadingTimeout;
 
 $(document).ready(function() {
-    $.getJSON("stations.json", function(data) {
+    // Function to get query parameter by name
+	function getQueryParam(name) {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
+	}
+	
+	// Determine which JSON file to load
+	let jsonFile;
+	if (getQueryParam('source') === 'national') {
+		jsonFile = 'stations-national.json';
+		$("#quickAccess").hide();
+		$("#selectAStation h5").hide();
+	} else {
+		jsonFile = 'stations.json';
+	}
+	
+	$.getJSON(jsonFile, function(data) {
         let dropdown = $("#stationSelect");
         dropdown.empty();
         dropdown.append('<option value="">Select a station</option>');
