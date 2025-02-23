@@ -1,31 +1,34 @@
-name: Update Version on Push
+name: Update Version in index.html
 
 on:
   push:
-	branches:
-	  - main  # Or your deployment branch
+	paths:
+	  - 'index.html'
 
 jobs:
   update-version:
 	runs-on: ubuntu-latest
-
 	steps:
-	- name: Checkout Repository
-	  uses: actions/checkout@v2
+	  - name: Checkout code
+		uses: actions/checkout@v2
+		with:
+		  fetch-depth: 0
+	  
+	  - name: Get current timestamp and commit ID
+		id: version
+		run: |
+		  TIMESTAMP=$(date +'%M%S')
+		  COMMIT_ID=$(git rev-parse --short HEAD)
+		  echo "VERSION=${TIMESTAMP}${COMMIT_ID}" >> $GITHUB_ENV
 
-	- name: Get Current Date and Commit Hash
-	  id: get-info
-	  run: |
-		echo "VERSION=$(date +'%Y-%m-%d %H:%M:%S') - $(git rev-parse --short HEAD)" >> $GITHUB_ENV
+	  - name: Replace VERSION_PLACEHOLDER
+		run: |
+		  sed -i "s/<!-- VERSION_PLACEHOLDER -->/${{ env.VERSION }}/g" index.html
 
-	- name: Update HTML File
-	  run: |
-		sed -i "s|<!-- VERSION_PLACEHOLDER -->|$VERSION|g" index.html
-
-	- name: Commit and Push Changes
-	  run: |
-		git config --global user.name "github-actions"
-		git config --global user.email "github-actions@github.com"
-		git add index.html
-		git commit -m "Update version: $VERSION" || echo "No changes to commit"
-		git push
+	  - name: Commit and push changes
+		run: |
+		  git config --global user.name 'github-actions'
+		  git config --global user.email 'github-actions@github.com'
+		  git add index.html
+		  git commit -m "Update version to ${{ env.VERSION }}"
+		  git push
