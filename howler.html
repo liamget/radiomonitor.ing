@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RadioMonitor.ing (Howler.js)</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+    <script src="https://kit.fontawesome.com/4dd5a9ae26.js" crossorigin="anonymous"></script>
+    <style>
+        html, body {
+            background-color: #ffb8c1;
+            font-family: "Archivo", sans-serif;
+        }
+        
+        #playerContainer {
+            width: 250px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: #fff;
+            position: relative;
+        }
+        
+        #stationLogo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        #stationName {
+            position: absolute;
+            top: 10px;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+        }
+        
+        #playPauseButton {
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4 text-center">
+    <h2>RadioMonitor.ing (Howler.js)</h2>
+    <p><em>Building a better radio player with Howler.js.</em></p>
+
+    <div id="playerContainer">
+        <img id="stationLogo" src="img/generic-radio-square-fade.png" alt="Radio station logo">
+        <div id="stationName">Select a station</div>
+        <button id="playPauseButton" class="btn">
+            <i class='fa-sharp-duotone fa-regular fa-circle-play'></i> Play
+        </button>
+    </div>
+
+    <h4>Quick Select:</h4>
+    <button class="btn btn-dark quickSelect" data-name="2GB" data-url="https://stream.2gb.com.au/">
+        2GB
+    </button>
+    <button class="btn btn-dark quickSelect" data-name="ABC Sydney" data-url="https://live-radio01.mediahubaustralia.com/">
+        ABC Sydney
+    </button>
+</div>
+
+<script>
+    let sound;
+    let isPlaying = false;
+
+    function setupStream(name, url, logo) {
+        if (sound) {
+            sound.unload();
+        }
+        
+        sound = new Howl({
+            src: [url],
+            html5: true,
+            volume: 1.0
+        });
+        
+        $("#stationLogo").attr("src", logo || "img/generic-radio-square-fade.png");
+        $("#stationName").text(name);
+        $(document).prop('title', `${name} - RadioMonitor.ing`);
+        
+        updateMediaSession(name, logo);
+    }
+
+    function togglePlayback() {
+        if (sound) {
+            if (isPlaying) {
+                sound.pause();
+                $("#playPauseButton").html("<i class='fa-sharp-duotone fa-regular fa-circle-play'></i> Play");
+            } else {
+                sound.play();
+                $("#playPauseButton").html("<i class='fa-sharp-duotone fa-regular fa-circle-pause'></i> Pause");
+            }
+            isPlaying = !isPlaying;
+        } else {
+            alert("Please select a station first.");
+        }
+    }
+
+    function updateMediaSession(name, logo) {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: name,
+                artist: 'RadioMonitor.ing',
+                artwork: [
+                    { src: logo, sizes: '512x512', type: 'image/png' }
+                ]
+            });
+            
+            navigator.mediaSession.setActionHandler('play', () => sound.play());
+            navigator.mediaSession.setActionHandler('pause', () => sound.pause());
+        }
+    }
+
+    $(".quickSelect").click(function() {
+        let name = $(this).data("name");
+        let url = $(this).data("url");
+        setupStream(name, url);
+    });
+
+    $("#playPauseButton").click(togglePlayback);
+</script>
+
+</body>
+</html>
