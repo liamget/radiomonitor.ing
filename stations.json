@@ -1,19 +1,24 @@
 [
 	{
 		"name": "2GB",
-		"logo": "img/2gb.png",  
+		"logo": "img/jpg/2gb.jpg",  
 		"url": "http://playerservices.streamtheworld.com/api/livestream-redirect/2GB.mp3"
 		
 	},
 	{
 		"name": "ABC Sydney",
-		"logo": "img/abc-sydney.png",  
+		"logo": "img/jpg/abc-sydney.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038302/localsydney/index.m3u8"
 	},
 	{
 		"name": "ABC RN",
-		"logo": "img/abc-rn.png",  
+		"logo": "img/jpg/abc-rn.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038318/rnnsw/index.m3u8"
+	},
+	{
+		"name": "Sky News (audio only)",
+		"logo": "img/jpg/skynews.jpg",  
+		"url": "http://playerservices.streamtheworld.com/api/livestream-redirect/NOVA_SKYNEWSAAC.AAC"
 	},
 	{
 		"name": "WSFM/Gold FM",
@@ -32,7 +37,7 @@
 	},
 	{
 		"name": "ABC News",
-		"logo": "img/abc-news.png",  
+		"logo": "img/jpg/abc-news.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/index.m3u8"
 	},
 	{
@@ -57,7 +62,7 @@
 	},
 	{
 		"name": "ABC Illawarra",
-		"logo": "img/abc-illawarra.png",
+		"logo": "img/jpg/abc-illawarra.jpg",
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038245/localillawarra/index.m3u8"
 	},
 	{
@@ -67,7 +72,7 @@
 	},
 	{
 		"name": "ABC Newcastle",
-		"logo": "img/abc-newcastle.png",
+		"logo": "img/jpg/abc-newcastle.jpg",
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038306/localnewcastle/index.m3u8"
 	},
 	{
