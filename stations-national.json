@@ -1,54 +1,59 @@
 [
 	{
 		"name": "ABC RN (Sydney feed)",
-		"logo": "img/abc-rn.png",  
+		"logo": "img/jpg/abc-rn.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038318/rnnsw/index.m3u8"
 	},
 	{
 		"name": "ABC News",
-		"logo": "img/abc-news.png",  
+		"logo": "img/jpg/abc-news.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038311/newsradio/index.m3u8"
 	},
 	{
+		"name": "Sky News (audio only)",
+		"logo": "img/jpg/skynews.jpg",  
+		"url": "http://playerservices.streamtheworld.com/api/livestream-redirect/NOVA_SKYNEWSAAC.AAC"
+	},
+	{
 		"name": "ABC Sydney",
-		"logo": "img/abc-sydney.png",  
+		"logo": "img/jpg/abc-sydney.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038302/localsydney/index.m3u8"
 	},
 	{
 		"name": "2GB Sydney",
-		"logo": "img/2gb.png",  
+		"logo": "img/jpg/2gb.jpg",  
 		"url": "http://playerservices.streamtheworld.com/api/livestream-redirect/2GB.mp3"
 		
 	},
 	{
 		"name": "ABC Melbourne",
-		"logo": "img/abc-melbourne.png",  
+		"logo": "img/jpg/abc-melbourne.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038300/localmelbourne/index.m3u8"
 	},
 	{
 		"name": "3AW Melbourne",
-		"logo": "img/3aw.png",  
+		"logo": "img/jpg/3aw.jpg",  
 		"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/3AW.mp3"
 	},
 	{
 		"name": "ABC Brisbane",
-		"logo": "img/abc-brisbane.png",  
+		"logo": "img/jpg/abc-brisbane.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038304/localbrisbane/index.m3u8"
 	},
 	{
 		"name": "4BC Brisbane",
-		"logo": "img/abc-brisbane.png",  
+		"logo": "img/jpg/abc-brisbane.jpg",  
 		"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/4BC.mp3"
 		
 	},
 	{
 		"name": "ABC Perth",
-		"logo": "img/abc-perth.png",  
+		"logo": "img/jpg/abc-perth.jpg",  
 		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038301/localperth/index.m3u8"
 	},
 	{
 		"name": "6PR Perth",
-		"logo": "img/6pr.png",  
+		"logo": "img/jpg/6pr.jpg",  
 		"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/6PR.mp3"
 	}
 	
