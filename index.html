@@ -250,6 +250,7 @@ $(document).ready(function() {
                 ]
             });
 			navigator.mediaSession.setActionHandler('play', () => {
+			  if (streamUrl) { audioPlayer.src = streamUrl; }
 			  audioPlayer.play();
 			});
 			navigator.mediaSession.setActionHandler('pause', () => {
