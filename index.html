@@ -147,12 +147,23 @@
 let audioPlayer = document.getElementById("audioPlayer");
 let isPlaying = false;
 let loadingTimeout;
+let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let track = audioContext.createMediaElementSource(audioPlayer);
+track.connect(audioContext.destination);
 
 $(document).ready(function() {
-    // Function to get query parameter by name
+    
+	// Function to get query parameter by name
 	function getQueryParam(name) {
 		const urlParams = new URLSearchParams(window.location.search);
 		return urlParams.get(name);
+	}
+	
+	// Register service worker for offline support
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('/service-worker.js').then(() => {
+			console.log('Service Worker registered');
+		});
 	}
 	
 	// Determine which JSON file to load
@@ -241,7 +252,6 @@ $(document).ready(function() {
 
     function resetPlayButton() {
         $("#playPauseButton").html("<i class='fa-solid fa-circle-play fa-5x'></i>");
-        // $("#stationLogo").attr("src", "img/jpg/generic-radio-square-fade.jpg");
     }
 
     function showLoading() {
@@ -295,6 +305,29 @@ $(document).ready(function() {
 
     setInterval(updateClock, 1000);
     updateClock();
+	
+	// Page visibility handling
+	document.addEventListener('visibilitychange', () => {
+		if (document.hidden && !audioPlayer.paused) {
+			audioContext.resume(); // Keep audio context active
+		}
+		if (!document.hidden && audioPlayer.paused && isPlaying) {
+			audioPlayer.play();
+		}
+	});
+	
+	// Save playback position for later
+	audioPlayer.addEventListener('pause', () => {
+		localStorage.setItem('lastPlaybackTime', audioPlayer.currentTime);
+	});
+	
+	window.addEventListener('load', () => {
+		const savedTime = localStorage.getItem('lastPlaybackTime');
+		if (savedTime) {
+			audioPlayer.currentTime = savedTime;
+		}
+	});
+
 });
 
 </script>
