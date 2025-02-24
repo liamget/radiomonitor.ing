@@ -1,0 +1,21 @@
+{
+  "name": "RadioMonitor.ing",
+  "short_name": "RadioMonitor.ing",
+  "description": "Friends, listen to your radio",
+  "start_url": "https://radiomonitor.ing/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ffe6ea",
+  "icons": [
+	{
+	  "src": "img/radio-192.png",
+	  "sizes": "192x192",
+	  "type": "image/png"
+	},
+	{
+	  "src": "img/radio-512.png",
+	  "sizes": "512x512",
+	  "type": "image/png"
+	}
+  ]
+}
