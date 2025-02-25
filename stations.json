@@ -2,13 +2,14 @@
 	{
 		"name": "2GB",
 		"logo": "img/jpg/2gb.jpg",  
-		"url": "http://playerservices.streamtheworld.com/api/livestream-redirect/2GB.mp3"
-		
+		"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/2GB.mp3",
+		"priority": true
 	},
 	{
 		"name": "ABC Sydney",
 		"logo": "img/jpg/abc-sydney.jpg",  
-		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038302/localsydney/index.m3u8"
+		"url": "https://mediaserviceslive.akamaized.net/hls/live/2038302/localsydney/index.m3u8",
+		"priority": true
 	},
 	{
 		"name": "ABC RN",
@@ -18,22 +19,26 @@
 	{
 		"name": "Sky News (audio only)",
 		"logo": "img/jpg/skynews.jpg",  
-		"url": "http://playerservices.streamtheworld.com/api/livestream-redirect/NOVA_SKYNEWSAAC.AAC"
+		"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/NOVA_SKYNEWSAAC.AAC",
+		"priority": true
 	},
 	{
 		"name": "WSFM/Gold FM",
 		"logo": "",  
-		"url": "https://ais-arn.streamguys1.com/au_002/playlist.m3u8"
+		"url": "https://ais-arn.streamguys1.com/au_002/playlist.m3u8",
+		"priority": true
 	},
 	{
 		"name": "2Day FM",
 		"logo": "",  
-		"url": "https://wz2liw.scahw.com.au/live/2day_128.stream/playlist.m3u8"
+		"url": "https://wz2liw.scahw.com.au/live/2day_128.stream/playlist.m3u8",
+		"priority": true
 	},
 	{
 		"name": "KIIS FM",
 		"logo": "",  
-		"url": "https://ais-arn.streamguys1.com/au_007/playlist.m3u8"
+		"url": "https://ais-arn.streamguys1.com/au_007/playlist.m3u8",
+		"priority": true
 	},
 	{
 		"name": "ABC News",
