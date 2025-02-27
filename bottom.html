@@ -25,6 +25,10 @@
 			font-family: "Inter", sans-serif;
 		}
 		
+		h1 {
+			font-weight: 900;
+		}
+		
 		.station-card {
 			transition: all 0.2s ease;
 			cursor: pointer;
@@ -262,7 +266,7 @@
 			</div>
 			<div class="player-controls">
 				<button class="control-btn play-btn" id="play-btn" disabled>
-					<i class="fas fa-play"></i>
+					<i class="fa-solid fa-play"></i>
 				</button>
 			</div>
 		</div>
@@ -308,13 +312,13 @@
 			// audioPlayer.addEventListener('timeupdate', updateProgress);
 			audioPlayer.addEventListener('play', () => {
 				showEqualizerAnimation(true);
-				$('#play-btn').html('<i class="fas fa-pause"></i>');
+				$('#play-btn').html('<i class="fa-solid fa-pause"></i>');
 				isPlaying = true;
 			});
 			
 			audioPlayer.addEventListener('pause', () => {
 				showEqualizerAnimation(false);
-				$('#play-btn').html('<i class="fas fa-play"></i>');
+				$('#play-btn').html('<i class="fa-solid fa-play"></i>');
 				isPlaying = false;
 			});
 			
