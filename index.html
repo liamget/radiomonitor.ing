@@ -249,7 +249,7 @@
 		<div class="player-content">
 			<div class="station-info">
 				<div class="current-logo-container">
-					
+					<img src="img/radio-solid-pad.svg" alt="Station logo" class="current-logo">
 				</div>
 				<div class="d-flex">
 					<div class="station-details">
@@ -277,6 +277,7 @@
 	
 	<!-- jQuery and Bootstrap JS -->
 	<script src="jquery.min.js"></script>
+	<script src="hls.min.js"></script>
 	
 	<script>
 		$(document).ready(function() {
@@ -367,10 +368,16 @@
 					grid.append(stationElement);
 				});
 				
-				// Enable station click
+				/* Enable station click
 				$('.station-card').on('click', function() {
 					const index = $(this).data('index');
 					playStation(index);
+				}); */
+				
+				// New station card
+				$('.station-card').on('click', function() {
+				  const index = $(this).data('index');
+				  playStationHLS(index);
 				});
 				
 				// Enable player controls
@@ -388,6 +395,7 @@
 				// Update player UI
 				const logoUrl = station.logo || 'https://placehold.co/600x400?text=' + encodeURIComponent(station.name);
 				$('.current-logo').attr('src', logoUrl);
+				$('.current-logo').attr('alt', station.name);
 				$('.station-name').text(station.name);
 				
 				// Highlight current station
@@ -404,18 +412,18 @@
 			}
 			
 			function togglePlay() {
-				if (currentStationIndex === -1 && stations.length > 0) {
-					playStation(0);
-					return;
-				}
-				
-				if (isPlaying) {
-					audioPlayer.pause();
-				} else {
-					audioPlayer.play().catch(error => {
-						console.error("Error playing audio:", error);
-					});
-				}
+			  if (currentStationIndex === -1 && stations.length > 0) {
+				playStationHLS(0);
+				return;
+			  }
+			  
+			  if (isPlaying) {
+				audioPlayer.pause();
+			  } else {
+				audioPlayer.play().catch(error => {
+				  console.error("Error playing audio:", error);
+				});
+			  }
 			}
 			
 			function showEqualizerAnimation(show) {
@@ -471,6 +479,90 @@
 			
 			setInterval(updateClock, 1000);
 			updateClock();
+			
+			// Initialize HLS.js
+			let hls = null;
+			
+			function playStationHLS(index) {
+			  if (index < 0 || index >= stations.length) return;
+			  
+			  currentStationIndex = index;
+			  const station = stations[index];
+			  
+			  // Update player UI
+			  const logoUrl = station.logo || 'https://placehold.co/600x400?text=' + encodeURIComponent(station.name);
+			  $('.current-logo').attr('src', logoUrl);
+			  $('.station-name').text(station.name);
+			  
+			  // Highlight current station
+			  $('.station-card').removeClass('border-primary');
+			  $(`.station-card[data-index="${index}"]`).addClass('border-primary');
+			  
+			  // Destroy existing hls instance if there is one
+			  if (hls !== null) {
+				hls.destroy();
+				hls = null;
+			  }
+			  
+			  // Check if the URL is an HLS stream (typically ends with .m3u8)
+			  if (station.url.includes('.m3u8')) {
+				// Check if HLS.js is supported
+				if (Hls.isSupported()) {
+				  hls = new Hls();
+				  hls.loadSource(station.url);
+				  hls.attachMedia(audioPlayer);
+				  
+				  hls.on(Hls.Events.MANIFEST_PARSED, function() {
+					audioPlayer.play().catch(error => {
+					  console.error("Error playing HLS audio:", error);
+					  showEqualizerAnimation(false);
+					  alert(`Could not play this station: ${error.message}`);
+					});
+				  });
+				  
+				  hls.on(Hls.Events.ERROR, function(event, data) {
+					console.error("HLS error:", data);
+					if (data.fatal) {
+					  switch(data.type) {
+						case Hls.ErrorTypes.NETWORK_ERROR:
+						  console.log("Network error encountered, trying to recover...");
+						  hls.startLoad();
+						  break;
+						case Hls.ErrorTypes.MEDIA_ERROR:
+						  console.log("Media error encountered, trying to recover...");
+						  hls.recoverMediaError();
+						  break;
+						default:
+						  // Cannot recover, destroy HLS instance
+						  hls.destroy();
+						  hls = null;
+						  showEqualizerAnimation(false);
+						  alert(`Could not play this HLS stream: ${data.details}`);
+						  break;
+					  }
+					}
+				  });
+				} else if (audioPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+				  // For browsers that support HLS natively (like Safari)
+				  audioPlayer.src = station.url;
+				  audioPlayer.play().catch(error => {
+					console.error("Error playing native HLS audio:", error);
+					showEqualizerAnimation(false);
+					alert(`Could not play this station: ${error.message}`);
+				  });
+				} else {
+				  alert("Your browser doesn't support HLS playback.");
+				}
+			  } else {
+				// Regular audio stream
+				audioPlayer.src = station.url;
+				audioPlayer.play().catch(error => {
+				  console.error("Error playing audio:", error);
+				  showEqualizerAnimation(false);
+				  alert(`Could not play this station: ${error.message}`);
+				});
+			  }
+			}
 		});
 	</script>
 </body>
